@@ -26,11 +26,13 @@ public class Converter {
 
         for(char ch: this.exp.toCharArray()) {
 
+            if(Character.isSpaceChar(ch)) continue;
+
             //if the char is letter throw Error immediately!
-            if (Character.isLetter(ch)) throw new RuntimeException("Invalid character: " + ch);
+            if (Character.isLetter(ch)) throw new CalculatorException("Invalid character: " + ch);
 
             //if the char is digit add it to the new expression
-            if (Character.isDigit(ch)) numbBuffer.append(ch);
+            if (Character.isDigit(ch) || (ch == '.')) numbBuffer.append(ch);
 
             //handle operators
             else {
@@ -48,7 +50,7 @@ public class Converter {
                     }
 
                     if (stack.isEmpty()) {
-                        throw new RuntimeException("Mismatched parentheses: extra ')' "); //return error in case there was ending bracket without opening one
+                        throw new CalculatorException("Mismatched parentheses: extra ')' "); //return error in case there was ending bracket without opening one
                     }
                     stack.pop();
                 } else if (degree.containsKey(ch)) {
@@ -60,7 +62,7 @@ public class Converter {
                     stack.push(ch); //push the new sign
                 }
                 else{
-                    throw new RuntimeException("Invalid Operator: " + ch);
+                    throw new CalculatorException("Invalid Operator: " + ch);
                 }
             }
         }
@@ -70,7 +72,7 @@ public class Converter {
         {
             if(stack.peek() == '(')
             {
-                throw new RuntimeException("Mismatched parentheses extra: '(' "); //return error in case there was opening bracket without ending one
+                throw new CalculatorException("Mismatched parentheses extra: '(' "); //return error in case there was opening bracket without ending one
             }
             post.append(stack.pop()).append(" ");
         }
